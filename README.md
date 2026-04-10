@@ -1,4 +1,6 @@
 Autonomous Industrial Equipment Monitoring & Activity Analytics
+
+
 🎯 Executive Summary
 This project implements an end-to-end Computer Vision pipeline designed for the real-time monitoring of heavy industrial machinery (excavators) in mining and construction environments. The core innovation lies in its ability to differentiate between "Idle" and "Productive" states by analyzing Articulated Motion—detecting mechanical operations even when the vehicle's chassis remains stationary.
 
@@ -50,5 +52,7 @@ Analytics Dashboard: Visualize real-time metrics and equipment status.
 Bash
 
 streamlit run app_local.py
+
+
 👨‍💻 Author
 Khaled Mohsen Abdellatif B.Sc. in Data Science and Artificial Intelligence, Zewail City. Specialized in Deep Learning, Computer Vision, and Distributed Systems.
