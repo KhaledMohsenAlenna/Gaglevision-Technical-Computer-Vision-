@@ -1,58 +1,10 @@
-Autonomous Industrial Equipment Monitoring & Activity Analytics
+# GAGLEVISION Technical Assessment
 
+## Project Architecture
+This project is a real-time microservices pipeline:
+1. **cv_producer.py**: YOLOv8 + Optical Flow tracker. Sends JSON payloads to Kafka.
+2. **db_consumer.py**: Consumes Kafka messages and writes analytics to PostgreSQL.
+3. **app.py**: Streamlit Dashboard displaying the live video feed and metrics.
 
-🎯 Executive Summary
-This project implements an end-to-end Computer Vision pipeline designed for the real-time monitoring of heavy industrial machinery (excavators) in mining and construction environments. The core innovation lies in its ability to differentiate between "Idle" and "Productive" states by analyzing Articulated Motion—detecting mechanical operations even when the vehicle's chassis remains stationary.
-
-⚙️ Core Technical Features
-Object Detection & Temporal Tracking: Leverages YOLOv8 with BoT-SORT/ByteTrack to maintain consistent ID assignment across frames, even under partial occlusion.
-
-Articulated Motion Analysis: Employs Dense Optical Flow (Farneback Algorithm) within localized bounding box regions. This bypasses the limitations of centroid-based tracking by quantifying pixel-level velocity vectors to identify digging, swinging, and dumping cycles.
-
-State-Aware Utilization Engine: A rolling-window buffer logic calculates real-time Utilization (U%), filtering out transient noise to provide stable operational metrics.
-
-Dual-Tier Deployment Architecture:
-
-Enterprise: Scalable microservices orchestrated via Docker, using Apache Kafka for high-throughput messaging and PostgreSQL for persistence.
-
-Evaluation (Lite): High-speed local synchronization via JSON buffers and a Streamlit-based analytics dashboard for rapid prototyping and edge deployment.
-
-🧠 The Articulated Motion Challenge
-Standard tracking algorithms often misclassify stationary heavy equipment as "Inactive." By integrating Optical Flow within the ROI (Region of Interest), this system extracts motion magnitude and angular orientation. This enables the distinction between:
-
-Vertical Displacement: Digging/Dumping cycles.
-
-Angular Displacement: Swinging operations.
-
-Zero Magnitude: True Idle state.
-
-🛠️ Deployment & Execution
-1. Environment Configuration
-Ensure you are using a virtual environment (Python 3.9+) to isolate dependencies:
-
-Bash
-
-# Initialize and activate environment
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .\.venv\Scripts\Activate.ps1
-
-# Install production-grade dependencies
-pip install --upgrade pip
-pip install -r requirements.txt
-2. Standalone Demonstration (Local Mode)
-To execute the lightweight pipeline for evaluation:
-
-Inference Engine: Process video frames and generate telemetry.
-
-Bash
-
-python cv_producer_local.py
-Analytics Dashboard: Visualize real-time metrics and equipment status.
-
-Bash
-
-streamlit run app_local.py
-
-
-👨‍💻 Author
-Khaled Mohsen Abdellatif B.Sc. in Data Science and Artificial Intelligence, Zewail City. Specialized in Deep Learning, Computer Vision, and Distributed Systems.
+## Solving Articulated Motion
+To detect "ACTIVE" states when only the excavator arm is moving (while tracks are stationary), the system applies **Dense Optical Flow (Farneback)** strictly within the equipment's bounding box. By tracking pixel movement magnitude and angles, it successfully distinguishes between stationary states, digging (vertical/diagonal vectors), and swinging (horizontal vectors) without requiring computationally heavy 3D-CNNs, ensuring real-time performance.
